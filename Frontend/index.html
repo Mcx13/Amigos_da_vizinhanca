@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registro de Ocorrências</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="container">
+    <section class="hero">
+      <div class="hero-card">
+        <div class="hero-top">
+          <div class="hero-title">
+            <div class="badge">Registro inteligente de ocorrências urbanas</div>
+            <h1>Organize denúncias de trânsito de forma simples, rápida e visual</h1>
+            <p>
+              Esta interface foi pensada para facilitar o registro de ocorrências envolvendo veículos e infrações em vias públicas.
+              Antes de preencher a ficha, você pode navegar pela cartilha explicativa deslizando para o lado.
+            </p>
+          </div>
+        </div>
+
+        <div class="steps-wrapper">
+          <div class="steps" id="stepsCarousel">
+            <article class="step-card">
+              <div class="step-number">01</div>
+              <h2>Sobre o sistema</h2>
+              <p>
+                O app serve para registrar ocorrências com informações padronizadas, ajudando no envio, organização e acompanhamento de denúncias.
+              </p>
+              <ul>
+                <li>Cadastro rápido</li>
+                <li>Escolha guiada de veículo e infração</li>
+                <li>Anexo de evidência em foto</li>
+              </ul>
+            </article>
+
+            <article class="step-card">
+              <div class="step-number">02</div>
+              <h2>Como usar</h2>
+              <p>
+                Preencha seu nome completo, informe o local da ocorrência, selecione o tipo de veículo e a infração observada.
+              </p>
+              <ul>
+                <li>Evite abreviações no local</li>
+                <li>Selecione a infração correspondente</li>
+                <li>Revise os dados antes de enviar</li>
+              </ul>
+            </article>
+
+            <article class="step-card">
+              <div class="step-number">03</div>
+              <h2>Importância da foto</h2>
+              <p>
+                O anexo da imagem fortalece o registro. São aceitos arquivos em PNG ou JPG, porque a burocracia já tem muitos formatos estranhos por conta própria.
+              </p>
+              <ul>
+                <li>Use foto nítida</li>
+                <li>Mostre o veículo e o contexto</li>
+                <li>Prefira boa iluminação</li>
+              </ul>
+            </article>
+
+            <article class="step-card">
+              <div class="step-number">04</div>
+              <h2>Pronto para cadastrar?</h2>
+              <p>
+                Quando terminar a leitura da cartilha, clique no botão abaixo para ir direto ao formulário de cadastro.
+              </p>
+              <div class="step-actions">
+                <button class="cta-btn" id="goToForm">Ir para o cadastro</button>
+              </div>
+            </article>
+          </div>
+
+          <div class="step-actions">
+            <button class="nav-btn" id="prevBtn">← Anterior</button>
+            <button class="nav-btn" id="nextBtn">Próximo →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="form-section" id="cadastro">
+      <div class="form-card">
+        <div class="form-header">
+          <h2>Ficha de cadastro da ocorrência</h2>
+          <p>
+            Preencha os campos abaixo com as informações da ocorrência. O formulário está preparado para receber os dados básicos e uma foto como anexo.
+          </p>
+        </div>
+
+        <form>
+          <div class="grid">
+            <div class="field">
+              <label for="nome">Nome completo</label>
+              <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo" required />
+            </div>
+
+            <div class="field">
+              <label for="local">Local</label>
+              <input type="text" id="local" name="local" placeholder="Ex.: Rua X, nº 120, Centro" required />
+            </div>
+
+            <div class="field">
+              <label for="veiculo">Veículo</label>
+              <select id="veiculo" name="veiculo" required>
+                <option value="" selected disabled>Selecione uma opção</option>
+                <option value="carro">Carro</option>
+                <option value="moto">Moto</option>
+                <option value="caminhao">Caminhão</option>
+                <option value="onibus">Ônibus</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="infracao">Infração</label>
+              <select id="infracao" name="infracao" required>
+                <option value="" selected disabled>Selecione uma infração</option>
+                <option value="frente_garagem">Veículo estacionado em frente de garagem</option>
+                <option value="parar_faixa">Parar em faixa de pedestre</option>
+                <option value="vaga_deficiente">Estacionar em vaga de deficiente sem autorização</option>
+                <option value="vaga_idoso">Estacionar em vaga de idoso sem autorização</option>
+                <option value="carga_descarga">Estacionar em local de carga e descarga</option>
+                <option value="rampa_acessibilidade">Estacionar em rampa de acessibilidade</option>
+                <option value="esquina">Estacionar em esquina</option>
+              </select>
+            </div>
+
+            <div class="field full">
+              <label for="foto">Anexo de foto</label>
+              <div class="upload-box">
+                <input type="file" id="foto" name="foto" accept="image/png, image/jpeg, .png, .jpg, .jpeg" required />
+                <p>Envie uma imagem em PNG ou JPG para comprovar a ocorrência.</p>
+                <div class="file-note">Formatos aceitos: .png, .jpg e .jpeg</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="submit-row">
+            <button type="submit" class="submit-btn">Enviar cadastro</button>
+          </div>
+
+          <div class="footer-note">
+            Interface criada para um fluxo de cadastro claro, moderno e fácil de integrar ao frontend.
+          </div>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const carousel = document.getElementById('stepsCarousel');
+    const nextBtn = document.getElementById('nextBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const goToForm = document.getElementById('goToForm');
+    const formSection = document.getElementById('cadastro');
+
+    function getScrollAmount() {
+      const firstCard = document.querySelector('.step-card');
+      return firstCard ? firstCard.offsetWidth + 22 : 340;
+    }
+
+    nextBtn.addEventListener('click', () => {
+      carousel.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+    });
+
+    prevBtn.addEventListener('click', () => {
+      carousel.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+    });
+
+    goToForm.addEventListener('click', () => {
+      formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  </script>
+</body>
+</html>
