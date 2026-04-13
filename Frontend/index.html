@@ -92,7 +92,7 @@
           </p>
         </div>
 
-        <form>
+        <form id="formOcorrencia">
           <div class="grid">
             <div class="field">
               <label for="nome">Nome completo</label>
@@ -142,6 +142,8 @@
           <div class="submit-row">
             <button type="submit" class="submit-btn">Enviar cadastro</button>
           </div>
+          
+        <div id="resultado"></div>
 
           <div class="footer-note">
             Interface criada para um fluxo de cadastro claro, moderno e fácil de integrar ao frontend.
@@ -151,29 +153,86 @@
     </section>
   </div>
 
+#========================
+#     JAVASCRIPT 
+#========================
+
+
+
   <script>
+    
     const carousel = document.getElementById('stepsCarousel');
     const nextBtn = document.getElementById('nextBtn');
     const prevBtn = document.getElementById('prevBtn');
     const goToForm = document.getElementById('goToForm');
     const formSection = document.getElementById('cadastro');
+    const form = document.getElementById("formOcorrencia");
+    const resultadoDiv = document.getElementById("resultado");
+     
 
-    function getScrollAmount() {
-      const firstCard = document.querySelector('.step-card');
-      return firstCard ? firstCard.offsetWidth + 22 : 340;
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const dados = {
+        nome: document.getElementById("nome").value,
+        local: document.getElementById("local").value,
+        veiculo: document.getElementById("veiculo").value,
+        infracao: document.getElementById("infracao").value
+      };
+
+      try {
+      const resposta = await fetch("http://127.0.0.1:8000/ocorrencia", {
+        method: "POST",
+         headers: {
+           "Content-Type": "application/json"
+         },
+         body: JSON.stringify(dados)
+      });
+
+      if (!resposta.ok) {
+        throw new Error("Erro ao processar a ocorrência.");
+      }
+
+      const resultado = await resposta.json();
+
+      console.log("RESULTADO:", resultado);
+
+      resultadoDiv.innerHTML = `
+        <p><strong>Usuário:</strong> ${resultado.nome}</p>
+        <p><strong>Local:</strong> ${resultado.local}</p>
+        <p><strong>Veículo:</strong> ${resultado.veiculo}</p>
+        <p><strong>Foto:</strong> ${resultado.foto}</p>
+        <p><strong>Infração:</strong> ${resultado.infracao}</p>
+        <p><strong>Status:</strong> ${resultado.status}</p>
+        <p><strong>Confiança:</strong> ${(resultado.confianca * 100).toFixed(1)}%</p>
+        <p><strong>Pontos ganhos:</strong> ${resultado.pontos_ganhos}</p>
+        <p><strong>Pontos totais:</strong> ${resultado.pontos_totais}</p>
+        <p><strong>Sequência de válidas:</strong> ${resultado.sequencia_validas}</p>
+        <p><strong>Modo confiança:</strong> ${resultado.modo_confianca ? "Ativo" : "Inativo"}</p>
+      `;
+    } catch (erro) {
+      console.error("Erro ao conectar com a API:", erro);
+      resultadoDiv.innerHTML = `<p style="color:red;">Erro ao conectar com a API.</p>`;
     }
+  });
 
-    nextBtn.addEventListener('click', () => {
-      carousel.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
-    });
+  function getScrollAmount() {
+    const firstCard = document.querySelector('.step-card');
+    return firstCard ? firstCard.offsetWidth + 22 : 340;
+  }
 
-    prevBtn.addEventListener('click', () => {
-      carousel.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
-    });
+  nextBtn.addEventListener('click', () => {
+    carousel.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+  });
+
+  prevBtn.addEventListener('click', () => {
+     carousel.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+  });
 
     goToForm.addEventListener('click', () => {
       formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
+  });
+  
   </script>
 </body>
 </html>

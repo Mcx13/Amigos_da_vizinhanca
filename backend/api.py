@@ -2,6 +2,7 @@ from datetime import datetime
 
 from fastapi import FastAPI
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 
 import models
 print("MODELS CARREGADO DE:", models.__file__)
@@ -10,6 +11,14 @@ from models import Usuario
 from services.ocorrencias import processar_ocorrencia
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class OcorrenciaEntrada(BaseModel):
     nome: str
