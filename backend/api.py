@@ -3,6 +3,9 @@ from datetime import datetime
 from fastapi import FastAPI
 from pydantic import BaseModel
 
+import models
+print("MODELS CARREGADO DE:", models.__file__)
+
 from models import Usuario
 from services.ocorrencias import processar_ocorrencia
 
@@ -34,16 +37,17 @@ def gerar_palavra_chave(infracao):
     else:
         return "irregularidade"
 
-def gerar_nome_arquivo(primo_nome, palavra_chave):
+def gerar_nome_arquivo(primeiro_nome, palavra_chave):
     agora = datetime.now()
     data_formatada = agora.strftime("%d%m%y_%H%M%S")
-    return f"{primo_nome}_{palavra_chave}_{data_formatada}.jpg"
+    return f"{primeiro_nome}_{palavra_chave}_{data_formatada}.jpg"
 
 
 @app.post("/ocorrencia")
 def criar_ocorrencia(dados: OcorrenciaEntrada):
     primeiro_nome = dados.nome.split()[0].capitalize()
     usuario = Usuario(primeiro_nome)
+    print("USUARIO CRIADO:", usuario.__dict__)
 
     palavra_chave = gerar_palavra_chave(dados.infracao)
     foto = gerar_nome_arquivo(primeiro_nome, palavra_chave)

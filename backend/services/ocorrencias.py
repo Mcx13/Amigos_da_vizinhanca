@@ -8,11 +8,11 @@ def processar_ocorrencia(usuario, local, veiculo, foto):
     if infracao_id and confianca >= 0.8:
         status = "classificado automaticamente"
         valida = True
-        precisou_de_validacao_humana = False
+        precisou_validacao_humana = False
     elif infracao_id and confianca < 0.8:
         status = "precisa de validação humana"
         valida = True
-        precisou_de_validacao_humana = True
+        precisou_validacao_humana = True
     else:
         status = "rejeitado"
         valida = False

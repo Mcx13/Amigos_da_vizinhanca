@@ -2,7 +2,7 @@
 
 infrações = {
     "Veiculo estacionado em frente de garagem": "parado",
-    "Estacionamento em frente ao hidrante": "parado",
+    "Veiculo estacionado em frente de garagem": "parado",
     "Parar em faixa de pedestre": "parado",
     "Estacionar em vaga de deficiente sem autorizacao": "parado",
     "Estacionar em vaga de idoso sem autorizacao": "parado",
