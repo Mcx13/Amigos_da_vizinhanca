@@ -1,23 +1,64 @@
-def analisar_imagem(nome_arquivo):
-    print("Recebi a imagem:", nome_arquivo)
+import base64
+import json
+from openai import OpenAI
 
-    nome = nome_arquivo.lower()
 
-    if "garagem" in nome:
-        return "veiculo estacionado em frente de garagem",0.8
-    elif "hidrante" in nome:
-        return "estacionamento em frente ao hidrante",0.8
-    elif "faixa" in nome:
-        return "parar em faixa de pedestre",0.95
-    elif "deficiente" in nome:
-        return "estacionar em vaga de deficiente sem autorizacao",0.9
-    elif "idoso" in nome:
-        return "estacionar em vaga de idoso sem autorizacao",0.9
-    elif "carga" in nome:
-        return "estacionar em local de carga e descarga",0.85
-    elif "rampa" in nome:
-        return "estacionar em rampa de acessibilidade",0.85
-    elif "esquina" in nome:
-        return "estacionar em esquina",0.8
-    else:
-        return None, 0.4
+client = OpenAI()
+
+
+def imagem_para_base64(caminho):
+    with open(caminho, "rb") as f:
+        return base64.b64encode(f.read()).decode("utf-8")
+
+
+def analisar_imagem(caminho_imagem):
+    print("recebi a imagem:", caminho_imagem)
+
+    imagem_base64 = imagem_para_base64(caminho_imagem)
+
+    prompt = """
+    Analise a imagem e identifique se há uma infração de trânsito
+    
+    Responda APENAS em JSON neste formato:
+    {
+        "infracao": "...",
+        "confianca": 0.0
+    }
+
+    Infrações possíveis:
+    - veiculo estacionado em frente de garagem
+    - parar em faixa de pedestre
+    - estacionar em vaga de deficiente sem autorizacao
+    - estacionar em vaga de idoso sem autorizacao
+    - estacionar em local de carga e descarga
+    - estacionar em rampa de acessibilidade
+    - estacionar em esquina
+    - estacionar frente ao hidrante
+
+    se não tiver certeza, use infracao como null.
+    """
+
+    resposta = client.responses.create(
+        model="gpt-5.4-mini",
+        input=[
+            {
+                "role": "user",
+                "content":[
+                    {"type": "input_text", "text": prompt},
+                    {
+                        "type": "input_image",
+                        "image_url": f"data:image/jpeg;base64,{imagem_base64}"
+                    }
+                ]
+            }
+        ]
+    )
+
+    texto = resposta.output_text
+
+    try:
+        dados = json.loads(texto)
+        return dados.get("infracao"), float(dados.get("confianca", 0.0))
+    except:
+        print("Erro ao interpretar resposta da IA", texto)
+        return None, 0.0
